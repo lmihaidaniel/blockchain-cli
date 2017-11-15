@@ -4,8 +4,8 @@
   "description": "A minimal blockchain command-line interface.",
   "main": "index.js",
   "scripts": {
-    "start": "node ./main.js",
-    "api": "node lib/api/main.js",
+    "start": "node ./index.js",
+    "cli": "node ./main.js",
     "test": "NODE_ENV=test ava --verbose"
   },
   "bin": {
@@ -20,17 +20,19 @@
   "license": "Apache-2.0",
   "dependencies": {
     "ascii-table": "0.0.9",
+    "body-parser": "latest",
     "cli-spinners": "^1.0.0",
     "cli-table2": "^0.2.0",
     "colors": "^1.1.2",
     "crypto-js": "^3.1.9-1",
+    "express": "latest",
+    "morgan": "latest",
     "peer-exchange": "^2.2.0",
+    "socket.io": "^2.0.4",
     "vorpal": "^1.12.0",
     "vorpal-log": "^1.1.0",
-    "wrtc": "0.0.62",
-    "express": "latest",
-    "body-parser": "latest",
-    "morgan": "latest"
+    "watch": "^1.0.2",
+    "wrtc": "0.0.62"
   },
   "devDependencies": {
     "ava": "^0.21.0",
