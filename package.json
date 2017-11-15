@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./main.js",
+    "api": "node lib/api/main.js",
     "test": "NODE_ENV=test ava --verbose"
   },
   "bin": {
@@ -26,7 +27,10 @@
     "peer-exchange": "^2.2.0",
     "vorpal": "^1.12.0",
     "vorpal-log": "^1.1.0",
-    "wrtc": "0.0.62"
+    "wrtc": "0.0.62",
+    "express": "latest",
+    "body-parser": "latest",
+    "morgan": "latest"
   },
   "devDependencies": {
     "ava": "^0.21.0",
