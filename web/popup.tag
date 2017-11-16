@@ -231,6 +231,7 @@
             if (!self.pending) {
                 self.popupVisible = false
                 self.certificate = null;
+                self.refs.inputAsset.value = '';
             }
         }
 
