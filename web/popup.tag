@@ -97,6 +97,7 @@
         }
 
         .inputBig {
+            padding-right: 0;
             color: white;
             margin-bottom: .5em;
         }
@@ -189,9 +190,13 @@
                 <svg><use xlink:href="#close"/></svg>
             </div>
             <h4>Certificate generated</h4>
-            <p>
-                {certificate}
-            </p>
+            <div>
+                <h4>Your private key:</h4>
+                <span>{certificate ? certificate.privateKey: null}</span>
+                <h4>Certificate</h4>
+                <p>HASH:</p>
+                <span>{certificate ? certificate.certificate.hash: null}</span>
+            </div>
         </div>
     </div>
     <div class="md-overlay" onclick={closeDialog}></div>
@@ -231,15 +236,21 @@
 
         socket.on('new_certificate', response => {
             self.pending = false;
-            self.certificate = JSON.stringify(response);
+            self.certificate = response;
             self.update();
         });
 
         this.requestCertificate = (e) => {
             e.preventDefault();
+            let private_key = self.refs.inputPK.value.trim();
+            let label = self.refs.inputAsset.value.trim();
+            if (!label.length) {
+                self.refs.inputAsset.focus();
+                return;
+            }
             if (!self.pending) {
                 self.pending = true;
-                socket.emit('new_certificate', {private_key: null, label: 'ana'});
+                socket.emit('new_certificate', {private_key, label});
             }
         }
     </script>
