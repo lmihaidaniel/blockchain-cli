@@ -234,7 +234,7 @@
             }
         }
 
-        socket.on('new_certificate', response => {
+        socket.on('send_certificate', response => {
             self.pending = false;
             self.certificate = response;
             self.update();
@@ -250,7 +250,7 @@
             }
             if (!self.pending) {
                 self.pending = true;
-                socket.emit('new_certificate', {private_key, label});
+                socket.emit('request_certificate', {private_key, label});
             }
         }
     </script>
