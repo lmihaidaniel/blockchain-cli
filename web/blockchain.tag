@@ -2,9 +2,17 @@
   <ul>
     <li each={blocks}>
       <span class="index">{index + 1}</span>
-      <span>{hash}</span>
-      <span class="date">{date(timestamp)}</span>
+      <svg class="icon"><use xlink:href="{icon(data.type)}"/></svg>
+      <p>
+        {type(data.type)}
+        <span class="date">{date(timestamp)}</span>
+        <span if={data.author}>Author: {data.author}</span>
+        <span if={data.buyer_data}>Buyer: {data.buyer_data}</span>
+        <span if={data.label}>Label: {data.label}</span>
+      </p>
+      <p if={data.asset_hash}>{data.asset_hash}</p>
       <div class="footer">
+        <span>{hash}</span>
       </div>
     </li>
   </ul>
@@ -27,6 +35,19 @@
 
     li span {
       display: block;
+      margin-bottom: .25em;
+    }
+
+    li p {
+      margin-bottom: .5em;
+    }
+
+    .icon {
+      position: absolute;
+      right: .5em;
+      top: .5em;
+      width: 24px;
+      height: 24px;
     }
 
     span.index{
@@ -49,6 +70,7 @@
     div.footer{
       margin-top: 1em;
       border-top: 1px solid #eee;
+      padding-top: 1em;
       font-size: 13px;
     }
   </style>
@@ -59,6 +81,28 @@
 
     this.date = timestamp => {
         return new Date(timestamp).toISOString();
+    }
+
+    this.icon = type => {
+      switch(type) {
+        case 'genesis':
+          return '#layers';
+        case 'asset_block':
+          return '#attachment';
+        default:
+          return '#key';
+      }
+    }
+
+    this.type = type => {
+      switch(type) {
+        case 'transaction':
+          return 'Transaction';
+        case 'asset_block':
+          return 'Asset';
+        default:
+          return 'Genesis';
+      }
     }
 
     let limitBlocksDisplayed = data => {

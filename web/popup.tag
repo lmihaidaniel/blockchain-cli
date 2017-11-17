@@ -56,7 +56,7 @@
 
         .md-button {
             cursor: pointer;
-            position: absolute;
+            position: fixed;
             right: 2em;
             bottom: 2em;
             width: 3em;
@@ -100,6 +100,10 @@
             padding-right: 0;
             color: white;
             margin-bottom: .5em;
+        }
+
+        .inputBig.error{
+            border-bottom-color: red;
         }
 
         .inputBig::placeholder{
@@ -165,6 +169,23 @@
             line-height: 40px;
             margin-bottom: 1em;
         }
+
+        .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .icon-close {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            width: 2em;
+            height: 2em;
+            cursor: pointer;
+        }
+        .icon-close:hover {
+            color: white;
+        }
     </style>
 
     <div class="md-modal md-effect-1 {md-show: popupVisible}">
@@ -176,7 +197,7 @@
             </div>
             <br>
             <div>
-                <input class="inputBig" ref="inputAsset" placeholder="Label asset">
+                <input class="inputBig {error: required}" ref="inputAsset" placeholder="Label asset" onkeyup={requireValidate}>
                 <p class="legend">Lorem ipsum dolor sit amet</p>
             </div>
             <br>
@@ -191,15 +212,20 @@
             </div>
             <h4>Certificate generated</h4>
             <div>
-                <h4>Your private key:</h4>
+                <h3>Your private key:</h3>
                 <span>{certificate ? certificate.privateKey: null}</span>
-                <h4>Certificate</h4>
+                <hr>
+                <h4><svg class="icon"><use xlink:href="#attachment"/></svg></h4>
+                <p>Label:</p>
+                <span>{certificate ? certificate.certificate.data.label: null}</span>
                 <p>HASH:</p>
-                <span>{certificate ? certificate.certificate.hash: null}</span>
+                <span>{certificate ? certificate.certificate.data.asset_hash: null}</span>
             </div>
         </div>
     </div>
-    <div class="md-overlay" onclick={closeDialog}></div>
+    <div class="md-overlay" onclick={closeDialog}>
+        <svg class="icon-close"><use xlink:href="#cross"/>
+    </div>
     <div class="md-button" show={!popupVisible} onclick={showDialog}>
         <svg><use xlink:href="#draw"/></svg>
         <span>Create new license</span>
@@ -210,6 +236,7 @@
         self.popupVisible = false
         self.pending = false;
         self.certificate = null;
+        self.required = false;
 
         riot.store.on('show_popup', () => {
             self.showDialog();
@@ -241,12 +268,22 @@
             self.update();
         });
 
+        this.requireValidate = (e) => {
+            if (
+                self.required
+                && e.target.value.trim().length
+            ) {
+                self.required = false;
+            }
+        }
+
         this.requestCertificate = (e) => {
             e.preventDefault();
             let private_key = self.refs.inputPK.value.trim();
             let label = self.refs.inputAsset.value.trim();
             if (!label.length) {
                 self.refs.inputAsset.focus();
+                self.required = true;
                 return;
             }
             if (!self.pending) {
