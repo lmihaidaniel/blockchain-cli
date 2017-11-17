@@ -170,6 +170,17 @@
             margin-bottom: 1em;
         }
 
+        h2 {
+            text-transform: uppercase;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: .5em;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
         .icon {
             width: 16px;
             height: 16px;
@@ -210,16 +221,19 @@
             <div class="close" onclick={closeDialog}>
                 <svg><use xlink:href="#close"/></svg>
             </div>
-            <h4>Certificate generated</h4>
+            <h4><svg class="icon"><use xlink:href="#attachment"/></svg>  Certificate generated</h4>
             <div>
-                <h3>Your private key:</h3>
-                <span>{certificate ? certificate.privateKey: null}</span>
-                <hr>
-                <h4><svg class="icon"><use xlink:href="#attachment"/></svg></h4>
-                <p>Label:</p>
-                <span>{certificate ? certificate.certificate.data.label: null}</span>
-                <p>HASH:</p>
-                <span>{certificate ? certificate.certificate.data.asset_hash: null}</span>
+                <h3>
+                    Your private key:
+                    <br/>
+                    <br/>
+                    <span class='bold'>{certificate ? certificate.privateKey: null}</span>
+                    <hr>
+                </h3>
+                <h2>Asset certificate</h2>
+                <p>Label: <span>{certificate ? certificate.certificate.data.label: null}</span></p>
+                <p>Asset: <span>{certificate ? certificate.certificate.data.asset_hash: null}</span></p>
+                <p>Author: <span>{certificate ? certificate.certificate.data.key: null}</span></p>
             </div>
         </div>
     </div>
@@ -265,6 +279,7 @@
         socket.on('send_certificate', response => {
             self.pending = false;
             self.certificate = response;
+            self.refs.inputPK.value = response.privateKey;
             self.update();
         });
 
