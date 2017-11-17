@@ -10,7 +10,8 @@
         <span if={data.buyer_data}>Buyer: {data.buyer_data}</span>
         <span if={data.label}>Label: {data.label}</span>
       </p>
-      <p if={data.asset_hash}>{data.asset_hash}</p>
+      <p if={data.asset_hash}><i>Asset</i>: {data.asset_hash}</p>
+      <p if={data.key}><i>Author</i>: {data.key}</p>
       <div class="footer">
         <span>{hash}</span>
       </div>
@@ -110,10 +111,17 @@
       self.update();
     }
 
-    riot.store.on('search-blockchain', (value) => {
-        let results = _data.filter(node => {
-          return node.hash.includes(value);
-        });
+    riot.store.on('search-blockchain', (value, type) => {
+      let results = [];
+        if (type === 1) {
+          results = _data.filter(node => {
+            return node.data.asset_hash ? node.data.asset_hash.includes(value) : false;
+          });
+        } else {
+          results = _data.filter(node => {
+            return node.hash.includes(value);
+          });
+        }
         limitBlocksDisplayed(results);
     });
 
